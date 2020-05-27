@@ -1,0 +1,103 @@
+---
+# Tasks to be performed on each file.
+
+- debug:
+    var: dotfile_item
+    verbosity: 2
+
+- name: Check if dotfile_item exists in repository.
+  stat:
+    path: "{{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
+  register: repo_file
+
+
+- name: Get MD5 hash when repo_file exists.
+  command: "md5sum {{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
+  register: repo_hash
+  changed_when: false
+  when:
+    - repo_file.stat.exists
+
+- debug:
+    msg: "Specified dotfiles item not found in local git repo: {{ dotfile_item.src_file }}"
+  when: not repo_file.stat.exists
+
+- name: Check if preexisting dotfile_item exists.
+  stat:
+    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+  register: pfile
+  check_mode: false
+
+- name: Get MD5 hash when preexisting file is a symlink.
+  command: "md5sum {{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+  register: link_hash
+  changed_when: false
+  when:
+    - pfile.stat.exists
+    - pfile.stat.islnk
+
+# We won't back up symlinks as they continue to exist in the
+# referenced file.
+- name: Back up preexisting dotfile if it exists and is not a symlink
+  copy:
+    src: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    dest: "{{ dotfiles_backup }}/{{ dotfile_item.src_file }}"
+    mode: preserve
+    remote_src: yes
+    directory_mode: '0755'
+  register: backup_result
+  when:
+    - pfile.stat.exists
+    - not pfile.stat.islnk
+
+- debug:
+    msg: >
+      Successfully backed up:
+      '{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}'
+        to
+       {{ dotfiles_backup }}/{{ dotfile_item.src_file }}
+  when:
+    - pfile.stat.exists
+    - not pfile.stat.islnk
+
+
+# Note we must remove file name from the hash using .split method,
+# because the filename component of the hash value will differ
+# between the symlink hash and the corresponding repository hash
+# (e.g '988a9e symlink.file' vs '988a9e repo.file'). Removing
+# the file names in each hash will result in a match when we
+# compare. This match confirms the symlink is referring to
+# the corresponding repo_file.
+- name: Remove preexisting dotfile unless matching symlink.
+  file:
+    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    state: absent
+  when: (pfile.stat.exists and repo_file.stat.exists) and
+        (not pfile.stat.islnk or
+        (pfile.stat.islnk and
+        link_hash.stdout.split(' ')[0] != repo_hash.stdout.split(' ')[0]))
+
+
+- name: Check if preexisting dotfile_item still exists.
+  stat:
+    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+  register: ufile
+  check_mode: false
+
+  # Create a symlink file if there is no symlink file currently and
+  # the corresponding local dotfiles git repository file is present.
+- name: Create symlink file.
+  file:
+    src: "{{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
+    dest: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    state: link
+  when:
+    - not ufile.stat.exists
+    - repo_file.stat.exists
+
+- debug:
+    msg: "Created symlink: {{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    verbosity: 3
+  when:
+      - not ufile.stat.exists
+      - repo_file.stat.exists
