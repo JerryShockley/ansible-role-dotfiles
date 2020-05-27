@@ -1,0 +1,17 @@
+.DS_Store
+.netrwhist
+.git
+/log
+/tmp
+/vendor
+tags
+tmp/**/*
+/node_modules/
+.env
+.byebug_history
+*.pyc
+.pytest_cache/
+*.sw[nop]
+.bundle
+/bower_components/
+/vendor
