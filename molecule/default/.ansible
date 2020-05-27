@@ -1,0 +1,2 @@
+exclude_paths:
+  - /Users/jerrys/.ansible/roles/geerlingguy.git/tasks/main.yml 

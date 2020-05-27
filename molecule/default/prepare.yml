@@ -1,0 +1,39 @@
+---
+- name: Prepare
+  hosts: all
+  vars:
+    ansible_user: ansible
+    # The dotfile repository url.
+    dotfiles_repo_url: https://github.com/JerryShockley/dotfiles.git
+    # The dotfile reporistory version.
+    dotfiles_repo_version: master
+    # Adds the hostkey for repo url if not already present. Note
+    # that if StrictHostChecking is set to no, this variable is ignored.
+    dotfiles_repo_accept_hostkey: true
+  roles:
+    - role: geerlingguy.git
+      become: yes
+
+  tasks:
+    # Include default role variables.
+    - include_vars:  '../../defaults/main.yml'
+
+    - name: Clone dotfiles repository to a local directory.
+      git:
+        repo: "{{ dotfiles_repo_url }}"
+        dest: "{{ dotfiles_repo_dir }}"
+        version: "{{ dotfiles_repo_version }}"
+        accept_hostkey: "{{ dotfiles_repo_accept_hostkey }}"
+
+    - name: Create XDG directory for Neovim.
+      file:
+        path: "{{ nvim_config }}"
+        state: directory
+        mode: '0755'
+
+  # Tests if backup and removal of preexisting collision
+  # files works.
+    - name: Create empty file to collide with dotfiles item.
+      file:
+        path: "{{ dotfiles[0].target_dir }}/{{ dotfiles[0].src_file }}"
+        state: touch
