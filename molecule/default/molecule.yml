@@ -1,37 +1,64 @@
 ---
 dependency:
   name: galaxy
+  options:
+    role-file: requirements.yml
 driver:
   name: docker
-lint:
-  name: yamllint
 platforms:
-  - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
-    command: ${MOLECULE_DOCKER_COMMAND:-""}
+  - name: ubuntu1804
+    # image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu1804}-ansible:latest"
+    image: "percygrunwald/docker-ubuntu1804-ansible:latest"
+    command: ""
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
+  log: true
+verifier:
+  name: testinfra
+  options:
+    # show which tests where executed in test output
+    v: 1
+  env:
+    PYTHONWARNINGS: "ignore:.*U.*mode is deprecated:DeprecationWarning"
 scenario:
   name: default
-  test_sequence:
-    - lint
+  create_sequence:
+    # - dependency
+    - create
+    - prepare
+  check_sequence:
+    # - dependency
+    - cleanup
     - destroy
-    - dependency
+    - create
+    - prepare
+    - converge
+    - check
+    - destroy
+  converge_sequence:
+    # - dependency
+    - create
+    - prepare
+    - converge
+  destroy_sequence:
+    # - dependency
+    - cleanup
+    - destroy
+  test_sequence:
+    # - dependency
+    - lint
+    - cleanup
+    - destroy
     - syntax
     - create
     - prepare
     - converge
     - idempotence
     # - side_effect
-    - verify
+    # - verify
+    - cleanup
     - destroy
-verifier:
-  name: testinfra
-  lint:
-    name: flake8
