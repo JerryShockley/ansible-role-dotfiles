@@ -1,7 +1,0 @@
----
-- name: Converge
-  hosts: all
-  tasks:
-    - name: "Include jerryshockley.dotfiles"
-      include_role:
-        name: "jerryshockley.dotfiles"
