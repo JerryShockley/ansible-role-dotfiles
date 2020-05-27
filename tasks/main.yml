@@ -1,2 +1,23 @@
 ---
 # tasks file for jerryshockley.dotfiles
+
+- name: Print xdg path
+  debug:
+    msg: "{{ item.name }} = {{ item.path }}"
+    verbosity: 3
+  loop:
+    - {name: "home", path: "{{ home }}"}
+    - {name: "xdg_config", path: "{{ xdg_config }}"}
+    - {name: "xdg_data", path: "{{ xdg_data }}"}
+
+- name: Create XDG directories for Neovim.
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ directories }}"
+
+- include_tasks: file_tasks.yml
+  loop: "{{ dotfiles }}"
+  loop_control:
+    loop_var: dotfile_item
