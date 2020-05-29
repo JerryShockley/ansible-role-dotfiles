@@ -1,5 +1,5 @@
 ---
-dependencies:
+dependencies: []
 
 galaxy_info:
   role_name: xdg_dotfiles
@@ -20,7 +20,6 @@ galaxy_info:
       versions:
         - all
         - anyplatforms:
-
   galaxy_tags:
     - dotfiles
     - config
