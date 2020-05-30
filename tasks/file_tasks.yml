@@ -10,7 +10,6 @@
     path: "{{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
   register: repo_file
 
-
 - name: Get MD5 hash when repo_file exists.
   command: "md5sum {{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
   register: repo_hash
@@ -60,7 +59,6 @@
     - pfile.stat.exists
     - not pfile.stat.islnk
 
-
 # Note we must remove file name from the hash using .split method,
 # because the filename component of the hash value will differ
 # between the symlink hash and the corresponding repository hash
@@ -76,7 +74,6 @@
         (not pfile.stat.islnk or
         (pfile.stat.islnk and
         link_hash.stdout.split(' ')[0] != repo_hash.stdout.split(' ')[0]))
-
 
 - name: Check if preexisting dotfile_item still exists.
   stat:
