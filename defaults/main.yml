@@ -51,6 +51,7 @@ nvim_data: "{{ xdg_data }}/nvim"
 directories:
   - "{{ dotfiles_backup }}"
   - "{{ nvim_data }}/site/plugged/snippets"
+  - "{{ nvim_data }}/undo"
   - "{{ nvim_config }}/after/plugin"
   - "{{ nvim_config }}/ftplugin"
 
