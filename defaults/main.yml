@@ -4,10 +4,10 @@
 # Home directory of current user.
 # The location of configuration files for applications that
 # do not follow the XDG Base Directory Standard.
-home: "{{ ansible_env.HOME | default('~') }}"
+home: "{{ansible_env.HOME | default('~')}}"
 
 # The directory the dotfiles repo is cloned into.
-dotfiles_repo_dir: "{{ home }}/src/dotfiles"
+dotfiles_repo_dir: "{{home}}/src/dotfiles"
 
 # The directory used to backup any preexisting non-symlink
 # configuration files found in the target path for a symlink
@@ -15,32 +15,33 @@ dotfiles_repo_dir: "{{ home }}/src/dotfiles"
 # if it does not already exist. We strongly recommend that
 # the directory is empty if it does already exist to avoid
 # secondary collisions.
-dotfiles_backup: "{{ home }}/.dotfiles_backup"
+dotfiles_backup: "{{home}}/.dotfiles_backup"
 
 # The location of XDG_CONFIG for application config files
 # that follow the XDG Base Directory Standard. Note the application name
 # needs to be appended to this home directory path.
-xdg_config: "{{ ansible_env.XDG_CONFIG_HOME |\
-                                default( home + '/.config' ) }}"
+xdg_config: "{{ansible_env.XDG_CONFIG_HOME |\
+                                default( home + '/.config' )}}"
 
 # The location of XDG_DATA for application data files
 # that follow the XDG Base Directory Standard. Note the application name
 # needs to be appended to this home directory path.
-xdg_data: "{{ ansible_env.XDG_DATA_HOME |\
-                                default( home + '/.local/share' ) }}"
+xdg_data: "{{ansible_env.XDG_DATA_HOME |\
+                                default( home + '/.local/share' )}}"
 
 # Configuration directory for Neovim
-nvim_config: "{{ xdg_config }}/nvim"
+nvim_config: "{{xdg_config}}/nvim"
 
 # Data directory for Neovim
-nvim_data: "{{ xdg_data }}/nvim"
+nvim_data: "{{xdg_data}}/nvim"
 
 # List of directories to be created if they do not already exist.  All
 # intermediate directories will be created if they do not already exist as well.
 # For example, if you are targeting symlinks such as _dir1/dir2/dir3/myfile.vim_
-# and _dir1/otherfile.vim_j you need only one directory entry: _"{{ dir1/dir2/dir3
-# }}"_. This entry creates 3 nested directories such that _"{{ dir1 }}"_ would be
-# redundant:
+# and _dir1/otherfile.vim_ you need only one directory entry:
+# _"{{dir1/dir2/dir3}}"_. This entry creates 3 nested directories such that
+# _"{{dir1}}"_ would be redundant:
+#
 #     - dir1
 #       - dir2
 #         -  dir3
@@ -49,42 +50,44 @@ nvim_data: "{{ xdg_data }}/nvim"
 # be listed here.
 
 directories:
-  - "{{ dotfiles_backup }}"
-  - "{{ nvim_data }}/site/plugged/snippets"
-  - "{{ nvim_data }}/undo"
-  - "{{ nvim_config }}/after/plugin"
-  - "{{ nvim_config }}/ftplugin"
+  - "{{dotfiles_backup}}"
+  - "{{nvim_data}}/site/plugged/snippets"
+  - "{{nvim_data}}/undo"
+  - "{{nvim_config}}/after/plugin"
+  - "{{nvim_config}}/ftplugin"
+  - "{{nvim_config}}/ftdetect"
 
-# List of configuration files to be installed and the target directories where the
-# symlink files are created. These symlink files point back to the corresponding
-# source files specified by _dotfiles_local_repo_.
+  # List of configuration files to be installed and the target directories where
+  # the symlink files are created. These symlink files point back to the
+  # corresponding source files specified by _dotfiles_repo_dir_.
 #
 #   - _src_file_: Relative file path from both _dotfiles_local_repo_dir_ and
 #                 _target_dir_. Such that the link source file (repository) is:
 #                 _dotfiles_local_repo_dir_/_src_file_ and the symlink file path
 #                 is: _target_dir_/_src_file_.
 #
-#   - _target_dir_: Root directory for remote symlink file creation. This directory
-#                   should mirror _dotfiles_local_repo_dir_ relative to
-#                   _src_file_ subdirectory location.
+#   - _target_dir_: Root directory for remote symlink file creation. This
+#                   directory should mirror _dotfiles_local_repo_dir_
+#                   relative to _src_file_ subdirectory location.
 #
 # Note when using XDG directory paths in _target_dir_ that the application
 # name should be appended to the XDG directory. Such as the value of
 # _nvim_config_ has _nvim_ appended.
 
 dotfiles:
-  - { src_file: '.zshrc', target_dir: "{{ home }}" }
-  - { src_file: '.zshenv', target_dir: "{{ home }}" }
-  - { src_file: '.zprofile', target_dir: "{{ home }}" }
-  - { src_file: '.tmux.conf', target_dir: "{{ home }}" }
-  - { src_file: '.gitignore', target_dir: "{{ home }}" }
-  - { src_file: '.gemrc', target_dir: "{{ home }}" }
-  - { src_file: '.zshrc', target_dir: "{{ home }}" }
-  - { src_file: 'init.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'commands.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'plugins.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'key_mappings.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'coc-settings.json', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'after/plugin/emmet.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'ftplugin/denite.vim', target_dir: "{{ nvim_config }}" }
-  - { src_file: 'ftplugin/denite-filter.vim', target_dir: "{{ nvim_config }}" }
+  - {src_file: '.zshrc', target_dir: "{{home}}"}
+  - {src_file: '.zshenv', target_dir: "{{home}}"}
+  - {src_file: '.zprofile', target_dir: "{{home}}"}
+  - {src_file: '.tmux.conf', target_dir: "{{home}}"}
+  - {src_file: '.gitignore', target_dir: "{{home}}"}
+  - {src_file: '.gemrc', target_dir: "{{home}}"}
+  - {src_file: '.zshrc', target_dir: "{{home}}"}
+  - {src_file: 'init.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'commands.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'plugins.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'key_mappings.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'coc-settings.json', target_dir: "{{nvim_config}}"}
+  - {src_file: 'after/plugin/emmet.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'ftplugin/denite.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'ftplugin/denite-filter.vim', target_dir: "{{nvim_config}}"}
+  - {src_file: 'ftdetect/ansible.vim', target_dir: "{{nvim_config}}"}
