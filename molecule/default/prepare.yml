@@ -35,5 +35,5 @@
   # files works.
     - name: Create empty file to collide with dotfiles item.
       file:
-        path: "{{ dotfiles[0].target_dir }}/{{ dotfiles[0].src_file }}"
+        path: "{{ dotfiles[0].dest_dir }}/{{ dotfiles[0].src_file }}"
         state: touch

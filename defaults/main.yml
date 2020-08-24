@@ -62,32 +62,33 @@ directories:
   # corresponding source files specified by _dotfiles_repo_dir_.
 #
 #   - _src_file_: Relative file path from both _dotfiles_local_repo_dir_ and
-#                 _target_dir_. Such that the link source file (repository) is:
+#                 _dest_dir_. Such that the link source file (repository) is:
 #                 _dotfiles_local_repo_dir_/_src_file_ and the symlink file path
-#                 is: _target_dir_/_src_file_.
+#                 is: _dest_dir_/_src_file_.
 #
-#   - _target_dir_: Root directory for remote symlink file creation. This
+#   - _dest_dir_: Root directory for remote symlink file creation. This
 #                   directory should mirror _dotfiles_local_repo_dir_
 #                   relative to _src_file_ subdirectory location.
 #
-# Note when using XDG directory paths in _target_dir_ that the application
+# Note when using XDG directory paths in _dest_dir_ that the application
 # name should be appended to the XDG directory. Such as the value of
 # _nvim_config_ has _nvim_ appended.
 
 dotfiles:
-  - {src_file: '.zshrc', target_dir: "{{ home }}"}
-  - {src_file: '.zshenv', target_dir: "{{ home }}"}
-  - {src_file: '.zprofile', target_dir: "{{ home }}"}
-  - {src_file: '.tmux.conf', target_dir: "{{ home }}"}
-  - {src_file: '.gitignore', target_dir: "{{ home }}"}
-  - {src_file: '.gemrc', target_dir: "{{ home }}"}
-  - {src_file: '.zshrc', target_dir: "{{ home }}"}
-  - {src_file: 'init.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'commands.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'plugins.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'key_mappings.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'coc-settings.json', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'after/plugin/emmet.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'ftplugin/denite.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'ftplugin/denite-filter.vim', target_dir: "{{ nvim_config }}"}
-  - {src_file: 'ftdetect/ansible.vim', target_dir: "{{ nvim_config }}"}
+  - {src_file: '.zshrc', dest_dir: "{{ home }}"}
+  - {src_file: '.zshenv', dest_dir: "{{ home }}"}
+  - {src_file: '.zprofile', dest_dir: "{{ home }}"}
+  - {src_file: '.tmux.conf', dest_dir: "{{ home }}"}
+  - {src_file: '.gitignore', dest_dir: "{{ home }}"}
+  - {src_file: '.ssh_ident', dest_dir: "{{ home }}"}
+  - {src_file: '.gemrc', dest_dir: "{{ home }}"}
+  - {src_file: '.zshrc', dest_dir: "{{ home }}"}
+  - {src_file: 'init.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'commands.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'plugins.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'key_mappings.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'coc-settings.json', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'after/plugin/emmet.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'ftplugin/denite.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'ftplugin/denite-filter.vim', dest_dir: "{{ nvim_config }}"}
+  - {src_file: 'ftdetect/ansible.vim', dest_dir: "{{ nvim_config }}"}

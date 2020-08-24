@@ -20,11 +20,11 @@ Any prexisting non-symlink files that result in a name collision are preserved.
 They are backed up to the specified directory in the options shown below. This
 directory should be empty if it exists and will be created if it does not exist.
 Note we do not back up symlink files as they refer to a file that exists in
-another location and that file is unchanged after we remove the symlink file. 
+another location and that file is unchanged after we remove the symlink file.
 
 ## Requirements
 
-Requires a directory of dotfiles(typically a cloned dotfiles directory). 
+Requires a directory of dotfiles(typically a cloned dotfiles directory).
 
 ## Role Variables
 
@@ -61,7 +61,7 @@ home directory path. This directory will be created if it doesn't already exist.
 
 The location of XDG_DATA for application data files that follow the XDG Base
 Directory Standard. Note the application name needs to be appended to this home
-directory path.  
+directory path.
 
     xdg_data: "{{ ansible_env.XDG_DATA_HOME |\ default( home + '/.local/share' )
     }}"
@@ -79,10 +79,10 @@ intermediate directories will be created if they do not already exist as well.
 For example, if you are targeting symlinks such as _dir1/dir2/dir3/myfile.vim_
 and _dir1/otherfile.vim_j you need only one directory entry: _"{{ dir1/dir2/dir3
 }}"_. This entry creates 3 nested directories such that _"{{ dir1 }}"_ would be
-redundant: 
+redundant:
 
-    - dir1 
-      - dir2 
+    - dir1
+      - dir2
         -  dir3
 
 All directories specified by _dotfiles_ below, must be listed here.
@@ -95,37 +95,37 @@ All directories specified by _dotfiles_ below, must be listed here.
 
 List of configuration files to be installed and the target directories where the
 symlink files are created. These symlink files point back to the corresponding
-source files specified by _dotfiles_local_repo_. 
+source files specified by _dotfiles_local_repo_.
 
   - _src_file_: Relative file path from both _dotfiles_local_repo_dir_ and
-    _target_dir_. Such that the link source file (repository) is:
+    _dest_dir_. Such that the link source file (repository) is:
     _dotfiles_local_repo_dir_/_src_file_ and the symlink file path is:
-    _target_dir_/_src_file_.
+    _dest_dir_/_src_file_.
 
-  - _target_dir_: Root directory for remote symlink file creation. This
+  - _dest_dir_: Root directory for remote symlink file creation. This
     directory should mirror _dotfiles_local_repo_dir_ relative to _src_file_
     subdirectory location.
 
-Note when using XDG directory paths in _target_dir_ that the application name
+Note when using XDG directory paths in _dest_dir_ that the application name
 should be appended to the XDG directory. Such as the value of _nvim_config_ has
 _nvim_ appended.
 
     dotfiles:
-      - { src_file: '.zshrc', target_dir: "{{ home }}" }
-      - { src_file: '.zshenv', target_dir: "{{ home }}" }
-      - { src_file: '.zprofile', target_dir: "{{ home }}" }
-      - { src_file: '.tmux.conf', target_dir: "{{ home }}" }
-      - { src_file: '.gitignore', target_dir: "{{ home }}" }
-      - { src_file: '.gemrc', target_dir: "{{ home }}" }
-      - { src_file: '.zshrc', target_dir: "{{ home }}" }
-      - { src_file: 'init.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'commands.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'plugins.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'key_mappings.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'coc-settings.json', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'after/plugin/emmet.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'ftplugin/denite.vim', target_dir: "{{ nvim_config }}" }
-      - { src_file: 'ftplugin/denite-filter.vim', target_dir: "{{ nvim_config
+      - { src_file: '.zshrc', dest_dir: "{{ home }}" }
+      - { src_file: '.zshenv', dest_dir: "{{ home }}" }
+      - { src_file: '.zprofile', dest_dir: "{{ home }}" }
+      - { src_file: '.tmux.conf', dest_dir: "{{ home }}" }
+      - { src_file: '.gitignore', dest_dir: "{{ home }}" }
+      - { src_file: '.gemrc', dest_dir: "{{ home }}" }
+      - { src_file: '.zshrc', dest_dir: "{{ home }}" }
+      - { src_file: 'init.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'commands.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'plugins.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'key_mappings.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'coc-settings.json', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'after/plugin/emmet.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'ftplugin/denite.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'ftplugin/denite-filter.vim', dest_dir: "{{ nvim_config
         }}" }
 
 ## Dependencies
