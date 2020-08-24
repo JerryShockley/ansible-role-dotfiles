@@ -23,12 +23,12 @@
 
 - name: Check if preexisting dotfile_item exists.
   stat:
-    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    path: "{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
   register: pfile
   check_mode: false
 
 - name: Get MD5 hash when preexisting file is a symlink.
-  command: "md5sum {{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+  command: "md5sum {{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
   register: link_hash
   changed_when: false
   when:
@@ -39,7 +39,7 @@
 # referenced file.
 - name: Back up preexisting dotfile if it exists and is not a symlink
   copy:
-    src: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    src: "{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
     dest: "{{ dotfiles_backup }}/{{ dotfile_item.src_file }}"
     mode: preserve
     remote_src: yes
@@ -52,7 +52,7 @@
 - debug:
     msg: >
       Successfully backed up:
-      '{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}'
+      '{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}'
         to
        {{ dotfiles_backup }}/{{ dotfile_item.src_file }}
   when:
@@ -68,7 +68,7 @@
 # the corresponding repo_file.
 - name: Remove preexisting dotfile unless matching symlink.
   file:
-    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    path: "{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
     state: absent
   when: (pfile.stat.exists and repo_file.stat.exists) and
         (not pfile.stat.islnk or
@@ -77,7 +77,7 @@
 
 - name: Check if preexisting dotfile_item still exists.
   stat:
-    path: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    path: "{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
   register: ufile
   check_mode: false
 
@@ -86,14 +86,14 @@
 - name: Create symlink file.
   file:
     src: "{{ dotfiles_repo_dir }}/{{ dotfile_item.src_file }}"
-    dest: "{{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    dest: "{{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
     state: link
   when:
     - not ufile.stat.exists
     - repo_file.stat.exists
 
 - debug:
-    msg: "Created symlink: {{ dotfile_item.target_dir }}/{{ dotfile_item.src_file }}"
+    msg: "Created symlink: {{ dotfile_item.dest_dir }}/{{ dotfile_item.src_file }}"
     verbosity: 3
   when:
       - not ufile.stat.exists
