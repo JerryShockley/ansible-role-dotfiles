@@ -116,7 +116,10 @@ _nvim_ appended.
       - { src_file: '.zprofile', dest_dir: "{{ home }}" }
       - { src_file: '.tmux.conf', dest_dir: "{{ home }}" }
       - { src_file: '.gitignore', dest_dir: "{{ home }}" }
+<<<<<<< HEAD
       - { src_file: '.ssh_ident', dest_dir: "{{ home }}"}
+=======
+>>>>>>> master
       - { src_file: '.gemrc', dest_dir: "{{ home }}" }
       - { src_file: '.zshrc', dest_dir: "{{ home }}" }
       - { src_file: 'init.vim', dest_dir: "{{ nvim_config }}" }
