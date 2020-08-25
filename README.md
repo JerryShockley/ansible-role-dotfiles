@@ -126,8 +126,10 @@ _nvim_ appended.
       - { src_file: 'coc-settings.json', dest_dir: "{{ nvim_config }}" }
       - { src_file: 'after/plugin/emmet.vim', dest_dir: "{{ nvim_config }}" }
       - { src_file: 'ftplugin/denite.vim', dest_dir: "{{ nvim_config }}" }
-      - { src_file: 'ftplugin/denite-filter.vim', dest_dir: "{{ nvim_config
-        }}" }
+      - { src_file: 'ftplugin/denite-filter.vim', dest_dir: "{{ nvim_config }}" }
+      - { src_file: 'ftdetect/ansible.vim', dest_dir: "{{ nvim_config }}"}
+
+
 
 ## Dependencies
 
